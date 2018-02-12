@@ -1,0 +1,45 @@
+##################################################################################################
+# etcd service
+##################################################################################################
+kind: Service
+apiVersion: v1
+metadata:
+  name: example-etcd-cluster-client-service
+spec:
+  selector:
+    etcd_cluster: example-etcd-cluster
+    app: etcd
+  ports:
+  - protocol: TCP
+    name: http
+    port: 2379
+    targetPort: 2379
+    nodePort: 32379
+  type: NodePort
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: etcd-operator
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: etcd-operator
+    spec:
+      containers:
+      - name: etcd-operator
+        image: quay.io/coreos/etcd-operator:v0.9.0
+        command:
+        - etcd-operator
+        env:
+        - name: MY_POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+---

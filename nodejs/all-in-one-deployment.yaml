@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy-etcd-storage
+  labels:
+    app: proxy-etcd-storage
+spec:
+  ports:
+  - port: 9080
+    name: http
+    nodePort: 32380
+  selector:
+    app: proxy-etcd-storage
+  type: NodePort
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: proxy-etcd-storage-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: proxy-etcd-storage
+        version: v1
+    spec:
+      containers:
+      - name: proxy-etcd-storage
+        image: todkap/proxy-etcd-storage:v1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9080
+---
+
+##################################################################################################
+# Ingress Routing
+##################################################################################################
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: simple-ingress
+#   annotations:
+#     kubernetes.io/ingress.class: "istio"
+# spec:
+#   rules:
+#   - http:
+#       paths:
+#       - path: /storage
+#         backend:
+#           serviceName: proxy-etcd-storage
+#           servicePort: 9080
+#       - path: /storage/.*
+#         backend:
+#           serviceName: proxy-etcd-storage
+#           servicePort: 9080
+#       - path: /
+#         backend:
+#           serviceName: proxy-etcd-storage
+#           servicePort: 9080
+# ---

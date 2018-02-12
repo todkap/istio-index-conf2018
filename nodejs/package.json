@@ -1,0 +1,19 @@
+{
+  "name": "istio-index-app",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "node-etcd": "^5.0.3",
+    "request": "^2.81.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "istio-index-conf2018 application to demonstrate how to leverage Istio when interacting with services such as etcd"
+}

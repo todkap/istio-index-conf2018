@@ -11,7 +11,7 @@ echo "simple ping test"
 curl -v http://$ingressIP:32380/; echo ""
 
 echo "test etcd service API call from node app"
-curl -v http://$ingressIP:32380/storage -H "Content-Type: application/json" -XPUT -d '{"key": "istioTest", "value":"Testing Istio using Ingress"}'; echo ""
+curl -v http://$ingressIP:32380/storage -H "Content-Type: application/json" -XPUT -d '{"key": "istioTest", "value":"Testing Istio using NodePort"}'; echo ""
 curl -v http://$ingressIP:32380/storage/istioTest; echo ""
 
 

@@ -55,6 +55,13 @@ echo "deploy Node application"
 kubectl apply -f <(istioctl kube-inject -f $PATH_TO_NODE/all-in-one-deployment.yaml)
 #kubectl apply -f $PATH_TO_NODE/all-in-one-deployment.yaml
 
+statusCheck="NOT_STARTED"
+while [ "$statusCheck" != "" ] ; do
+	sleep 20
+	statusCheck=$(kubectl get pods  -o json | jq '.items[].status.phase' | grep -v "Running")
+	echo "Still starting pods $(date)"
+done
+
 
 
 

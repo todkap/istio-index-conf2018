@@ -52,8 +52,8 @@ while [ "$statusCheck" != "" ] ; do
 done
 
 echo "deploy Node application"
-#kubectl apply -f <(istioctl kube-inject -f $PATH_TO_NODE/all-in-one-deployment.yaml)
-kubectl apply -f $PATH_TO_NODE/all-in-one-deployment.yaml
+kubectl apply -f <(istioctl kube-inject -f $PATH_TO_NODE/all-in-one-deployment.yaml)
+#kubectl apply -f $PATH_TO_NODE/all-in-one-deployment.yaml
 
 
 

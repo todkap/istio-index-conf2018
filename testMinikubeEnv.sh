@@ -14,16 +14,12 @@ echo "test etcd service API call from node app"
 curl -v http://$ingressIP:32380/storage -H "Content-Type: application/json" -XPUT -d '{"key": "istioTest", "value":"Testing Istio using NodePort"}'; echo ""
 curl -v http://$ingressIP:32380/storage/istioTest; echo ""
 
+echo "simple hello test"
+curl -v http://$ingressIP:$ingressPort/; echo ""
 
-
-
-
-# echo "simple hello test"
-# curl -v http://$ingressIP:$ingressPort/; echo ""
-
-# echo "test etcd service API call from node app"
-# curl -v http://$ingressIP:$ingressPort/storage -H "Content-Type: application/json" -XPUT -d '{"key": "istioTest", "value":"Testing Istio using Ingress"}'; echo ""
-# curl -v http://$ingressIP:$ingressPort/storage/istioTest; echo ""
+echo "test etcd service API call from node app"
+curl -v http://$ingressIP:$ingressPort/storage -H "Content-Type: application/json" -XPUT -d '{"key": "istioTest", "value":"Testing Istio using Ingress"}'; echo ""
+curl -v http://$ingressIP:$ingressPort/storage/istioTest; echo ""
 
 # CLIENT=$(kubectl get pod -l app=proxy-etcd-storage -o jsonpath='{.items[0].metadata.name}')
 # SERVER=$(kubectl get pod -l app=etcd -o jsonpath='{.items[0].metadata.name}')

@@ -34,3 +34,11 @@ echo "client logs from istio-proxy"
 kubectl logs $CLIENT istio-proxy | grep /v2/keys
 echo "server logs from istio-proxy"
 kubectl logs $SERVER istio-proxy | grep /v2/keys
+
+
+## Simple load test using loadtest (https://www.npmjs.com/package/loadtest)
+if [ -x "$(command -v loadtest)" ]; then
+	loadtest -n 400 -c 10 --rps 20 http://$ingressIP:$ingressPort/storage/istioTest
+	loadtest -n 400 -c 10 --rps 10 http://$ingressIP:$ingressPort/storage/istioTest
+	loadtest -n 400 -c 10 --rps 40 http://$ingressIP:$ingressPort/storage/istioTest
+fi

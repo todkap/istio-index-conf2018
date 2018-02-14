@@ -8,10 +8,10 @@ Istio is an open platform to connect, manage, and secure microservices. To learn
 Getting started assumes an elementary understanding of Kubernetes.  In this project, there are a set of scripts that assume the prior installation of Docker, the Kubernetes CLI as well as jq for manipulating JSON objects returned from the various Kubernetes commands.  There is also the assumption around some level of Node.js knowledge.  
 
 **Here are some quick links to the various tools.**  
-**Docker Install:** https://docs.docker.com/install/  
-**Kubernetes Install:** https://kubernetes.io/docs/tasks/tools/install-kubectl/  
-**jq Download:** https://stedolan.github.io/jq/download/  
-**Node.js Download:** https://nodejs.org/en/download/  
+**Docker Install:** https://docs.docker.com/install/  
+**Kubernetes Install:** https://kubernetes.io/docs/tasks/tools/install-kubectl/   
+**jq Download:** https://stedolan.github.io/jq/download/     
+**Node.js Download:** https://nodejs.org/en/download/     
 
 ## Kubernetes Providers
 The code below should run on any Kubernetes compliant provider and has been tested on both Minikube and IBM Cloud Private. Depending upon which provider chosen, the instructions will vary slightly.

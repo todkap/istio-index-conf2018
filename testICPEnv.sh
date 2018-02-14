@@ -5,7 +5,7 @@ ingressIP=9.37.39.44
 ingressPort=$(kubectl -n istio-system get svc istio-ingress -o 'jsonpath={.spec.ports[0].nodePort}'); echo ""
 
 echo "simple etcd test"
-curl -v http://$ingressIP:32379/v2/keys/message -XPUT -d value="Hello world"; echo ""
+curl -v http://$ingressIP:32012/v2/keys/message -XPUT -d value="Hello world"; echo ""
 echo "-------------------------------"
 
 echo "simple ping test"
@@ -26,8 +26,11 @@ curl -v http://$ingressIP:$ingressPort/storage -H "Content-Type: application/jso
 curl -v http://$ingressIP:$ingressPort/storage/istioTest; echo ""
 echo "-------------------------------"
 
-# CLIENT=$(kubectl get pod -l app=proxy-etcd-storage -o jsonpath='{.items[0].metadata.name}')
-# SERVER=$(kubectl get pod -l app=etcd -o jsonpath='{.items[0].metadata.name}')
-# #Search the client logs for the API calls to etcd. 
-# kubectl logs $CLIENT istio-proxy | grep /v2/keys
-# kubectl logs $SERVER istio-proxy | grep /v2/keys
+CLIENT=$(kubectl get pod -l app=proxy-etcd-storage -o jsonpath='{.items[0].metadata.name}')
+SERVER=$(kubectl get pod -l app=etcd -o jsonpath='{.items[0].metadata.name}')
+#Search the client logs for the API calls to etcd. 
+
+echo "client logs from istio-proxy"
+kubectl logs $CLIENT istio-proxy | grep /v2/keys
+echo "server logs from istio-proxy"
+kubectl logs $SERVER istio-proxy | grep /v2/keys

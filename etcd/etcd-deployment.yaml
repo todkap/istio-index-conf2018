@@ -22,4 +22,4 @@ spec:
         - name: MY_POD_NAME
           valueFrom:
             fieldRef:
-              fieldPath: metadata.name     
+              fieldPath: metadata.name 

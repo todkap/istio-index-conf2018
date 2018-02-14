@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json()); // for parsing application/json
 
 const scheme = "http";
-const ipAddress = "example-etcd-cluster";
+const ipAddress = "etcd-service";
 const port = "2379";
 const connectionAddress = scheme +"://" + ipAddress +":" + port;
 const etcd = new Etcd([connectionAddress] /*, options */);

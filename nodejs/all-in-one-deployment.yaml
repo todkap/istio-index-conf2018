@@ -46,8 +46,10 @@ spec:
   ports:
   - port: 2379
     name: http
+    nodePort: 32012
   selector:
     app: etcd
+  type: NodePort   
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment

@@ -7,10 +7,10 @@ Istio is an open platform to connect, manage, and secure microservices. To learn
 ## Setup
 To get started, you should have an elementary understanding of Kubernetes.  In this project, I provide a set of scripts that assume that you have already installed Docker, the Kubernetes CLI as well as jq for manipulating JSON objects returned from the various Kubernetes commands.   I also assume that you know Node.js but this is not required. I have provided quick lines to the various tools below.
 
-**Docker Install:** https://docs.docker.com/install/
-**Kubernetes Install:** https://kubernetes.io/docs/tasks/tools/install-kubectl/
-**jq Download:** https://stedolan.github.io/jq/download/
-**Node.js Download:** https://nodejs.org/en/download/
+**Docker Install:** https://docs.docker.com/install/  
+**Kubernetes Install:** https://kubernetes.io/docs/tasks/tools/install-kubectl/  
+**jq Download:** https://stedolan.github.io/jq/download/  
+**Node.js Download:** https://nodejs.org/en/download/  
 
 ## Kubernetes Providers
 The code below should run on any Kubernetes compliant provider. I have tested on both Minikube and IBM Cloud Private. Depending upon which option you choose, the instructions will vary slightly.
@@ -19,7 +19,7 @@ The code below should run on any Kubernetes compliant provider. I have tested on
 Minikube is available for download and installation instructions are located [here](https://kubernetes.io/docs/tasks/tools/install-minikube/). Minikube provides a simple and easy to use developer environment for learning about Kubernetes.
 
 ### IBM Cloud Private
-IBM provides a Community Edition of their Kubernetes runtime free for development purposes and includes most of the same feature functions as their production version, Enterprise Edition, with the one exception being High Availabilty. To install, IBM Cloud Private, please refer to the [Installation Guide for 2.1.0] (https://www.ibm.com/support/knowledgecenter/en/SSBS6K_2.1.0/installing/install_containers_CE.html)
+IBM provides a Community Edition of their Kubernetes runtime free for development purposes and includes most of the same feature functions as their production version, Enterprise Edition, with the one exception being High Availabilty. To install, IBM Cloud Private, please refer to the [Installation Guide for 2.1.0](https://www.ibm.com/support/knowledgecenter/en/SSBS6K_2.1.0/installing/install_containers_CE.html)
 
 
 

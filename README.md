@@ -21,7 +21,7 @@ Minikube is available for download and installation instructions are located [he
 ### IBM Cloud Private
 IBM provides a Community Edition of their Kubernetes runtime free for development purposes and includes most of the same feature functions as their production version, Enterprise Edition, with the one exception being High Availabilty. To install, IBM Cloud Private, please refer to the [Installation Guide for 2.1.0](https://www.ibm.com/support/knowledgecenter/en/SSBS6K_2.1.0/installing/install_containers_CE.html)
 
-## Istio Index Conf 2018 Application
+## Istio Index Conference 2018 Application
 To get started, clone the repo ```git clone git@github.com:todkap/istio-index-conf2018.git```
 
 ### Kubernetes Setup

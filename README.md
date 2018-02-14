@@ -1,13 +1,14 @@
 # Istio is not just for microservices
-Secure Kubernetes platform services by using Istio Service Mesh.  Typically, running live code helps users understand how to apply concepts to their own use cases.  This project centers around a basic Node.js application showing the power of Istio Service Mesh for persistence datastores such as etcd.
+Secure Kubernetes platform services by using Istio Service Mesh.  Typically seeing live running code helps users understand how to apply concepts to their own use cases.  This project centers around a basic Node.js application demonstrating the power of Istio Service Mesh for persistence datastores such as etcd.
 
 ## Background on Istio
 Istio is an open platform to connect, manage, and secure microservices. To learn more about Istio, please visit the [Intro page]( https://istio.io/about/intro.html).
 
 ## Setup
-Getting started assumes an elementary understanding of Kubernetes.  In this project, there are a set of scripts that assume that installation of Docker, the Kubernetes CLI as well as jq for manipulating JSON objects returned from the various Kubernetes commands.  There is an assumption made about Node.js knowledge but this is not required. Here are some quick lines to the various tools below.
+Getting started assumes an elementary understanding of Kubernetes.  In this project, there are a set of scripts that assume the prior installation of Docker, the Kubernetes CLI as well as jq for manipulating JSON objects returned from the various Kubernetes commands.  There is also the assumption around some level of Node.js knowledge.  
 
-**Docker Install:** https://docs.docker.com/install/  
+**Here are some quick links to the various tools.**  
+**Docker Install:** https://docs.docker.com/install/  
 **Kubernetes Install:** https://kubernetes.io/docs/tasks/tools/install-kubectl/  
 **jq Download:** https://stedolan.github.io/jq/download/  
 **Node.js Download:** https://nodejs.org/en/download/  
@@ -19,10 +20,10 @@ The code below should run on any Kubernetes compliant provider and has been test
 Minikube is available for download and installation instructions are located [here](https://kubernetes.io/docs/tasks/tools/install-minikube/). Minikube provides a simple and easy to use developer environment for learning about Kubernetes.
 
 ### IBM Cloud Private
-IBM provides a Community Edition of their Kubernetes runtime free for development purposes and includes most of the same feature functions as their production version, Enterprise Edition, with the one exception being High Availabilty. To install, IBM Cloud Private, please refer to the [Installation Guide for 2.1.0](https://www.ibm.com/support/knowledgecenter/en/SSBS6K_2.1.0/installing/install_containers_CE.html)
+IBM provides a Community Edition of their Kubernetes runtime free for development purposes and includes most of the same feature functions as their production version, Enterprise Edition, with the one exception being High Availabilty. To install IBM Cloud Private, please refer to the [Installation Guide for 2.1.0](https://www.ibm.com/support/knowledgecenter/en/SSBS6K_2.1.0/installing/install_containers_CE.html)
 
 ## Istio Index Conference 2018 Application
-To get started, clone the repo ```git clone git@github.com:todkap/istio-index-conf2018.git```
+To get started with the code, clone the repo ```git clone git@github.com:todkap/istio-index-conf2018.git```
 
 ### Kubernetes Setup
 - **Minikube:** Prior to deploying to Minikube, Minikube first needs to be started.   In the root directory of this project, there is a script ```createMinikubeEnv.sh``` that tears down the previous Minikube environment and initializes a new environment with the appropriate Kubernetes context.

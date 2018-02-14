@@ -215,6 +215,29 @@ server logs from istio-proxy
 [2018-02-14T16:28:24.673Z] "GET /v2/keys/istioTest HTTP/1.1" 200 - 0 119 3 0 "-" "-" "8aa0f7d8-caac-9065-bb4c-d11c7af7d93f" "etcd-service:2379" "127.0.0.1:2379"
 ```
 
+### Istio Metrics 
+Istio provides native enablement for capturimg metrics for network activity.  To drive some additional metrics, a simple test script can be run to populate the charts for both Grafana and Promotheus similar to the code below.   
+
+**Test Script**  
+```
+## Simple load test using loadtest (https://www.npmjs.com/package/loadtest)
+if [ -x "$(command -v loadtest)" ]; then
+	loadtest -n 400 -c 10 --rps 20 http://$ingressIP:$ingressPort/storage/istioTest
+	loadtest -n 400 -c 10 --rps 10 http://$ingressIP:$ingressPort/storage/istioTest
+	loadtest -n 400 -c 10 --rps 40 http://$ingressIP:$ingressPort/storage/istioTest
+fi
+```
+
+***Grafana***
+![alt text][grafana]
+
+***Prometheus***
+![alt text][prometheus]
+
+
+[grafana]: https://github.com/todkap/istio-index-conf2018/blob/master/images/loadtest_grafana.png "Load Test Grafana"
+[prometheus]: https://github.com/todkap/istio-index-conf2018/blob/master/images/loadtest_prometheus.png "Load Test Prometheus"
+
 
 ### Notes
 - This project is based upon a Medium Article [Istio is not just for microservices](https://medium.com/ibm-cloud/istio-is-not-just-for-microservices-4ed199322bf4) written in 2017 and updated to support the latest version of Istio and Kubernetes.   As most of the content was embedded within the original Medium article, this project was created to allow developers to clone this repository and modify it to learn more about Kubernetes, Istio and etcd.

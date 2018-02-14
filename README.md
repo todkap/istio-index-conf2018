@@ -215,5 +215,6 @@ server logs from istio-proxy
 ```
 
 
-### Note
-This project is a updated version of a Medium Article [Istio is not just for microservices](https://medium.com/ibm-cloud/istio-is-not-just-for-microservices-4ed199322bf4) written in 2017 and has been updated to make the scenario work with latest version of Istio and Kubernetes.   As most of the content was embedded with the Medium article, I felt it would be better to include the entire project and allow readers to clone this repository and modify it to learn more about Kubernetes, Istio and etcd.
+### Notes
+- This project is based upon a Medium Article [Istio is not just for microservices](https://medium.com/ibm-cloud/istio-is-not-just-for-microservices-4ed199322bf4) written in 2017 and updated to support the latest version of Istio and Kubernetes.   As most of the content was embedded within the original Medium article, this project was created to allow developers to clone this repository and modify it to learn more about Kubernetes, Istio and etcd.
+- The Node.js application source code is included in the nodejs subdirectory of the project and also includes the Dockerfile and build script for deploying to a Docker registry.   Some modifications would be required to publish the image to your own Docker registry and to have the deployment yaml reference the new image but should be relatively easy to figure out if necessary.

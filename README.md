@@ -232,7 +232,7 @@ fi
 ```
 
 ***Grafana***  
-In Kubernetes environments, execute the following command:
+In your Kubernetes environment, execute the following command:
 ```
 kubectl -n istio-system port-forward $(kubectl -n istio-system get \
    pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
@@ -242,7 +242,7 @@ Visit http://localhost:3000/dashboard/db/istio-dashboard in your web browser.  T
 ![alt text][grafana]
 
 ***Prometheus***  
-In Kubernetes environments, execute the following command:
+In your Kubernetes environment, execute the following command:
 ```
 kubectl -n istio-system port-forward $(kubectl -n istio-system get \
     pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090 &   
@@ -250,6 +250,15 @@ kubectl -n istio-system port-forward $(kubectl -n istio-system get \
 Visit http://localhost:9090/graph in your web browser. The Istio Dashboard will look similar to:
 
 ![alt text][prometheus]
+
+***Weave Scope***  
+During the deploy step, Weave Scope was deployed as part of the set up.   In the console, the port for Weave Scope is logged but is also available using the command.
+```
+kubectl get service weave-scope-app --namespace=weave -o 'jsonpath={.spec.ports[0].nodePort}'  
+```
+Weave Scope provides a Service Graph which will display the request flow for the tests executed in the test process. The Weave Scope Dashboard will look similar to:
+
+![alt text][weavescope]
 
 ### Slides
 **Istio is not just for microservices on Slideshare:** https://www.slideshare.net/ToddKaplinger/istio-is-not-just-for-microservices
@@ -261,4 +270,7 @@ Visit http://localhost:9090/graph in your web browser. The Istio Dashboard will 
 
 [grafana]: https://github.com/todkap/istio-index-conf2018/blob/master/images/loadtest_grafana.png "Load Test Grafana"
 [prometheus]: https://github.com/todkap/istio-index-conf2018/blob/master/images/loadtest_prometheus.png "Load Test Prometheus"
+[weavescope]: https://github.com/todkap/istio-index-conf2018/blob/master/images/weavescope.png "Weave Scope"
+
 [israel]: https://github.com/todkap/istio-index-conf2018/blob/master/images/1397375_910870955327_147651637_o.jpg "Israel"
+

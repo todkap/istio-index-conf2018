@@ -1,5 +1,24 @@
 
-#!/bin/bash
+#!/bin/
+
+function timer()
+{
+    if [[ $# -eq 0 ]]; then
+        echo $(date '+%s')
+    else
+        local  stime=$1
+        etime=$(date '+%s')
+
+        if [[ -z "$stime" ]]; then stime=$etime; fi
+
+        dt=$((etime - stime))
+        ds=$((dt % 60))
+        dm=$(((dt / 60) % 60))
+        dh=$((dt / 3600))
+        printf '%d:%02d:%02d' $dh $dm $ds
+    fi
+}
+startTime=$(timer)
 
 ingressIP=9.37.39.44
 ingressPort=$(kubectl -n istio-system get svc istio-ingress -o 'jsonpath={.spec.ports[0].nodePort}'); echo ""
@@ -42,3 +61,6 @@ if [ -x "$(command -v loadtest)" ]; then
 	loadtest -n 400 -c 10 --rps 10 http://$ingressIP:$ingressPort/storage/istioTest
 	loadtest -n 400 -c 10 --rps 40 http://$ingressIP:$ingressPort/storage/istioTest
 fi
+
+endTime=$(timer startTime)
+printf 'testICPEnv Elapsed time: %s\n' $endTime 

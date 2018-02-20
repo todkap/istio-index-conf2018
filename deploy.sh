@@ -3,6 +3,27 @@ export PATH_TO_ISTIO_ADDONS=$PWD/istioaddons
 export PATH_TO_ETCD=$PWD/etcd
 export PATH_TO_NODE=$PWD/nodejs
 
+function timer()
+{
+    if [[ $# -eq 0 ]]; then
+        echo $(date '+%s')
+    else
+        local  stime=$1
+        etime=$(date '+%s')
+
+        if [[ -z "$stime" ]]; then stime=$etime; fi
+
+        dt=$((etime - stime))
+        ds=$((dt % 60))
+        dm=$(((dt / 60) % 60))
+        dh=$((dt / 3600))
+        printf '%d:%02d:%02d' $dh $dm $ds
+    fi
+}
+startTime=$(timer)
+
+
+
 if [ !  -d "istio-0.5.1" ]; then
 	curl -L https://git.io/getLatestIstio | sh -
 fi
@@ -57,3 +78,6 @@ while [ "$statusCheck" != "" ] ; do
 	statusCheck=$(kubectl get pods  -o json | jq '.items[].status.phase' | grep -v "Running")
 	echo "Still starting pods $(date)"
 done
+
+endTime=$(timer startTime)
+printf 'deploy Elapsed time: %s\n' $endTime 

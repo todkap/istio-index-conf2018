@@ -231,10 +231,24 @@ if [ -x "$(command -v loadtest)" ]; then
 fi
 ```
 
-***Grafana***
+***Grafana***  
+In Kubernetes environments, execute the following command:
+```
+kubectl -n istio-system port-forward $(kubectl -n istio-system get \
+   pod -l app=grafana -o jsonpath='{.items[0].metadata.name}') 3000:3000 &
+```
+Visit http://localhost:3000/dashboard/db/istio-dashboard in your web browser.  The Istio Dashboard will look similar to:
+
 ![alt text][grafana]
 
-***Prometheus***
+***Prometheus***  
+In Kubernetes environments, execute the following command:
+```
+kubectl -n istio-system port-forward $(kubectl -n istio-system get \
+    pod -l app=prometheus -o jsonpath='{.items[0].metadata.name}') 9090:9090 &   
+```
+Visit http://localhost:9090/graph in your web browser. The Istio Dashboard will look similar to:
+
 ![alt text][prometheus]
 
 ### Slides

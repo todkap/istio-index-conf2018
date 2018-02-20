@@ -79,5 +79,18 @@ while [ "$statusCheck" != "" ] ; do
 	echo "Still starting pods $(date)"
 done
 
+kubectl apply -f "https://cloud.weave.works/k8s/scope.yaml?k8s-service-type=NodePort&k8s-version=$(kubectl version | base64 | tr -d '\n')"
+
+statusCheck="NOT_STARTED"
+while [ "$statusCheck" != "" ] ; do
+	sleep 20
+	statusCheck=$(kubectl get pods  -o json | jq '.items[].status.phase' | grep -v "Running")
+	echo "Still starting pods $(date)"
+done
+
+WEAVE_SCOPE_PORT=$(kubectl get service weave-scope-app --namespace=weave -o 'jsonpath={.spec.ports[0].nodePort}')
+echo "Weave Scope is available on port $WEAVE_SCOPE_PORT"
+
+
 endTime=$(timer startTime)
 printf 'deploy Elapsed time: %s\n' $endTime 

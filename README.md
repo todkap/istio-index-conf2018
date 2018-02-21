@@ -1,10 +1,10 @@
 ![alt text][israel]
 
-# Istio is not just for microservices
+# [Istio is not just for microservices](#header)
 
 Secure Kubernetes platform services by using Istio Service Mesh.  Typically seeing live running code helps users understand how to apply concepts to their own use cases.  This project centers around a basic Node.js application demonstrating the power of Istio Service Mesh for persistence datastores such as etcd.
 
-## Background on Istio
+## [Background on Istio](#background)
 Istio is an open platform to connect, manage, and secure microservices. To learn more about Istio, please visit the [Intro page]( https://istio.io/about/intro.html).
 
 ## Setup

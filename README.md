@@ -23,7 +23,7 @@ The code below should run on any Kubernetes compliant provider and has been test
 Minikube is available for download and installation instructions are located [here](https://kubernetes.io/docs/tasks/tools/install-minikube/). Minikube provides a simple and easy to use developer environment for learning about Kubernetes.
 
 ### IBM Cloud Private
-IBM provides a Community Edition of their Kubernetes runtime free for development purposes and includes most of the same feature functions as their production version, Enterprise Edition, with the one exception being High Availabilty. To install IBM Cloud Private, please refer to the [Installation Guide for 2.1.0](https://www.ibm.com/support/knowledgecenter/en/SSBS6K_2.1.0/installing/install_containers_CE.html)
+IBM provides a Community Edition of their Kubernetes runtime free for development purposes and includes most of the same feature functions as their production version, Enterprise Edition, with the one exception being High Availability. To install IBM Cloud Private, please refer to the [Installation Guide for 2.1.0](https://www.ibm.com/support/knowledgecenter/en/SSBS6K_2.1.0/installing/install_containers_CE.html)
 
 ## Istio Index Conference 2018 Application
 To get started with the code, clone the repo ```git clone git@github.com:todkap/istio-index-conf2018.git```

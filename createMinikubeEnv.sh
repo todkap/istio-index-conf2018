@@ -30,4 +30,4 @@ minikube start --vm-driver=xhyve
 
 
 endTime=$(timer startTime)
-printf 'Elapsed time: %s\n' $endTime 
+printf 'createMinikubeEnv Elapsed time: %s\n' $endTime 

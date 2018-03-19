@@ -59,7 +59,18 @@ while [ "$statusCheck" != "" ] ; do
 done
 
 echo "deploy Node application"
-kubectl $ACTION  -f <(istioctl kube-inject -f $PATH_TO_NODE/all-in-one-deployment.yaml)
+#kubectl $ACTION  -f <(istioctl kube-inject -f $PATH_TO_NODE/all-in-one-deployment.yaml)
+kubectl $ACTION  -f <(istioctl kube-inject -f $PATH_TO_NODE/deployment.yaml)
+
+statusCheck="NOT_STARTED"
+while [ "$statusCheck" != "" ] ; do
+	sleep 20
+	statusCheck=$(kubectl get pods  -o json | jq '.items[].status.phase' | grep -v "Running")
+	echo "Still starting pods $(date)"
+done
+
+echo "deploy etcd"
+kubectl $ACTION  -f <(istioctl kube-inject -f $PATH_TO_ETCD/deployment.yaml)
 
 statusCheck="NOT_STARTED"
 while [ "$statusCheck" != "" ] ; do
@@ -69,7 +80,7 @@ while [ "$statusCheck" != "" ] ; do
 done
 
 echo "deploy etcd operator"
-kubectl $ACTION -f $PATH_TO_ETCD/etcd-deployment.yaml
+kubectl $ACTION -f $PATH_TO_ETCD/etcd-operator-deployment.yaml
 
 
 statusCheck="NOT_STARTED"

@@ -1,0 +1,39 @@
+##################################################################################################
+# etcd service
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: etcd-service
+  labels:
+    app: etcd
+    etcd_cluster: example-etcd-cluster
+spec:
+  ports:
+  - port: 2379
+    name: http
+    nodePort: 32012
+  selector:
+    app: etcd
+  type: NodePort   
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: etcd-v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: etcd
+        version: v1
+    spec:
+      containers:
+      - name: etcd
+        image: quay.io/coreos/etcd:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 2379
+
+---

@@ -24,11 +24,11 @@ startTime=$(timer)
 
 
 
-if [ !  -d "istio-0.5.1" ]; then
+if [ !  -d "istio-0.6.0" ]; then
 	curl -L https://git.io/getLatestIstio | sh -
 fi
 
-cd istio-0.5.1
+cd istio-0.6.0
 export PATH=$PWD/bin:$PATH
 
 ACTION=apply

@@ -2,6 +2,7 @@
 export PATH_TO_ISTIO_ADDONS=$PWD/istioaddons
 export PATH_TO_ETCD=$PWD/etcd
 export PATH_TO_NODE=$PWD/nodejs
+export SECURITY=$PWD/security
 
 function timer()
 {
@@ -51,6 +52,15 @@ kubectl $ACTION -f $PATH_TO_ISTIO_ADDONS/prometheus_telemetry.yaml
 kubectl $ACTION -f install/kubernetes/addons/grafana.yaml
 
 
+export kcontext=$(kubectl config current-context)
+export kns=$(kubectl config view $kcontext -o json | jq --raw-output '.contexts[] | select(.name=="'$kcontext'") | .context.namespace')
+if [ "$kns" != "default" ]; then
+	cat $SECURITY/permissions.yaml.tmpl | \
+	sed -e "s/{NAMESPACE}/$kns/" > $SECURITY/permissions.yaml
+	kubectl $ACTION -f $SECURITY/permissions.yaml
+fi
+
+
 statusCheck="NOT_STARTED"
 while [ "$statusCheck" != "" ] ; do
 	sleep 20
@@ -90,17 +100,19 @@ while [ "$statusCheck" != "" ] ; do
 	echo "Still starting pods $(date)"
 done
 
-kubectl apply -f "https://cloud.weave.works/k8s/scope.yaml?k8s-service-type=NodePort&k8s-version=$(kubectl version | base64 | tr -d '\n')"
+kubectl $ACTION -f "https://cloud.weave.works/k8s/scope.yaml?k8s-service-type=NodePort&k8s-version=$(kubectl version | base64 | tr -d '\n')"
 
-statusCheck="NOT_STARTED"
-while [ "$statusCheck" != "" ] ; do
-	sleep 20
-	statusCheck=$(kubectl get pods  -o json | jq '.items[].status.phase' | grep -v "Running")
-	echo "Still starting pods $(date)"
-done
+if [ $ACTION != delete] ; then
+	statusCheck="NOT_STARTED"
+	while [ "$statusCheck" != "" ] ; do
+		sleep 20
+		statusCheck=$(kubectl get pods  -o json | jq '.items[].status.phase' | grep -v "Running")
+		echo "Still starting pods $(date)"
+	done
 
-WEAVE_SCOPE_PORT=$(kubectl get service weave-scope-app --namespace=weave -o 'jsonpath={.spec.ports[0].nodePort}')
-echo "Weave Scope is available on port $WEAVE_SCOPE_PORT"
+	WEAVE_SCOPE_PORT=$(kubectl get service weave-scope-app --namespace=weave -o 'jsonpath={.spec.ports[0].nodePort}')
+	echo "Weave Scope is available on port $WEAVE_SCOPE_PORT"
+fi
 
 
 endTime=$(timer startTime)

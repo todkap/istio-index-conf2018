@@ -34,7 +34,7 @@ To get started with the code, clone the repo ```git clone git@github.com:todkap/
 - **IBM Cloud Private:** IBM Cloud Private has a [configure client](https://www.ibm.com/support/knowledgecenter/en/SSBS6K_2.1.0/manage_cluster/cfc_cli.html) step that will configure the Kubernetes CLI to point to a given IBM Cloud Private installation.  This context will be used each time the Kubectl CLI executes commands.
 
 ### Deploy
-This project contains a script that will deploy Istio and the application to Kubernetes and is called ```deploy.sh```.  The script provide verbose output as it progresses through the various steps waiting for the entire systemt to be in ```Runninng``` state prior to exiting.
+This project contains a script that will deploy Istio and the application to Kubernetes and is called ```deploy.sh```.  The script provides verbose output as it progresses through the various steps waiting for the entire system to be in ```Runninng``` state prior to exiting.
 
 ### Testing
 This project contains two scripts for testing depending upon which Kubernetes provider that is used. The only difference in the two scripts is the setting of the ingress IP address for IBM Cloud Private.   To test choose either ```testICPEnv.sh``` or ```testMinikubeEnv.sh``` based upon your provider.

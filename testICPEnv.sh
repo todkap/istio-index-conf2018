@@ -20,7 +20,7 @@ function timer()
 }
 startTime=$(timer)
 
-ingressIP=9.37.39.124
+ingressIP=9.37.39.12
 ingressPort=$(kubectl -n istio-system get svc istio-ingress -o 'jsonpath={.spec.ports[0].nodePort}'); echo ""
 
 echo "simple etcd test"
@@ -40,7 +40,12 @@ echo "simple hello test"
 curl -v http://$ingressIP:$ingressPort/; echo ""
 echo "-------------------------------"
 
-echo "test etcd service API call from node app"
+echo "test simple ping test from node app via Ingress"
+curl -v http://$ingressIP:$ingressPort/; echo ""
+echo "-------------------------------"
+
+
+echo "test etcd service API call from node app via Ingress"
 curl -v http://$ingressIP:$ingressPort/storage -H "Content-Type: application/json" -XPUT -d '{"key": "istioTest", "value":"Testing Istio using Ingress"}'; echo ""
 curl -v http://$ingressIP:$ingressPort/storage/istioTest; echo ""
 echo "-------------------------------"
@@ -48,7 +53,6 @@ echo "-------------------------------"
 CLIENT=$(kubectl get pod -l app=proxy-etcd-storage -o jsonpath='{.items[0].metadata.name}')
 SERVER=$(kubectl get pod -l app=etcd -o jsonpath='{.items[0].metadata.name}')
 #Search the client logs for the API calls to etcd. 
-
 echo "client logs from istio-proxy"
 kubectl logs $CLIENT istio-proxy | grep /v2/keys
 echo "server logs from istio-proxy"

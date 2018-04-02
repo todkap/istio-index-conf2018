@@ -1,4 +1,6 @@
 
+export MASTER_IP=9.37.39.12
+
 export PATH_TO_ISTIO_ADDONS=$PWD/istioaddons
 export PATH_TO_ETCD=$PWD/etcd
 export PATH_TO_NODE=$PWD/nodejs
@@ -23,34 +25,55 @@ function timer()
 }
 startTime=$(timer)
 
+ACTION=apply
 
+# install bx cli
+curl -sL https://ibm.biz/idt-installer | bash
+
+os=`uname`
+case "$os" in
+    Linux) os="linux" ;;
+    Darwin) os="darwin" ;;
+esac
+
+# install helm cli
+curl -ko helm https://$MASTER_IP:8443/helm-api/cli/$os-amd64/helm
+mv helm /usr/local/bin
+export PATH=/usr/local/bin:$PATH
+chmod 755 /usr/local/bin/helm
 
 if [ !  -d "istio-0.6.0" ]; then
 	curl -L https://git.io/getLatestIstio | sh -
 fi
 
-cd istio-0.6.0
-export PATH=$PWD/bin:$PATH
+export PATH=$PWD/istio-0.6.0/bin:$PATH
 
-ACTION=delete
+# install bx pr plugin
+curl -ko icp-plugin https://$MASTER_IP:8443/api/cli/icp-$os-amd64
+bx plugin install -f icp-plugin
+rm -f icp-plugin
+bx pr login -u admin -p admin --skip-ssl-validation -c id-mycluster-account -a https://$MASTER_IP:8443
+bx pr cluster-config mycluster
 
-# echo "deploy the default istio platform with istio-auth"
-# kubectl $ACTION -f install/kubernetes/istio-auth.yaml
-echo "deploy the default istio platform with istio"
-kubectl $ACTION -f install/kubernetes/istio.yaml
+helm init --client-only
 
+kubectl delete services,deployment --all --namespace=istio-system
+kubectl delete services,deployment --all --namespace=default
+
+echo "deploy istio helm chart"
+helm delete istio --purge --tls
+
+rm -rf ./istio-chart
+git clone git@github.ibm.com:IBMPrivateCloud/istio-chart.git istio-chart
+
+helm install ./istio-chart --name istio --namespace istio-system --set sidecar-injector.enabled=true --set global.securityEnabled=false  --tls
 
 statusCheck="NOT_STARTED"
 while [ "$statusCheck" != "" ] ; do
 	sleep 20
-	statusCheck=$(kubectl get pods  -o json | jq '.items[].status.phase' | grep -v "Running")
+	statusCheck=$(kubectl get pods --namespace=istio-system -o json | jq '.items[].status.phase' | grep -v "Running")
 	echo "Still starting pods $(date)"
 done
-
-kubectl $ACTION -f install/kubernetes/addons/prometheus.yaml
-kubectl $ACTION -f $PATH_TO_ISTIO_ADDONS/prometheus_telemetry.yaml
-kubectl $ACTION -f install/kubernetes/addons/grafana.yaml
-
 
 export kcontext=$(kubectl config current-context)
 export kns=$(kubectl config view $kcontext -o json | jq --raw-output '.contexts[] | select(.name=="'$kcontext'") | .context.namespace')
@@ -60,6 +83,8 @@ if [ "$kns" != "default" ]; then
 	kubectl $ACTION -f $SECURITY/permissions.yaml
 fi
 
+kubectl label namespace $kns istio-injection=enabled --overwrite
+kubectl get namespace -L istio-injection
 
 statusCheck="NOT_STARTED"
 while [ "$statusCheck" != "" ] ; do
@@ -69,8 +94,8 @@ while [ "$statusCheck" != "" ] ; do
 done
 
 echo "deploy Node application"
-#kubectl $ACTION  -f <(istioctl kube-inject -f $PATH_TO_NODE/all-in-one-deployment.yaml)
-kubectl $ACTION  -f <(istioctl kube-inject -f $PATH_TO_NODE/deployment.yaml)
+
+kubectl $ACTION  -f $PATH_TO_NODE/deployment.yaml
 
 statusCheck="NOT_STARTED"
 while [ "$statusCheck" != "" ] ; do
@@ -80,7 +105,7 @@ while [ "$statusCheck" != "" ] ; do
 done
 
 echo "deploy etcd"
-kubectl $ACTION  -f <(istioctl kube-inject -f $PATH_TO_ETCD/deployment.yaml)
+kubectl $ACTION  -f $PATH_TO_ETCD/deployment.yaml
 
 statusCheck="NOT_STARTED"
 while [ "$statusCheck" != "" ] ; do

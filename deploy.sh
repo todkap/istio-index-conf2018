@@ -32,7 +32,7 @@ fi
 cd istio-0.6.0
 export PATH=$PWD/bin:$PATH
 
-ACTION=delete
+ACTION=apply
 
 # echo "deploy the default istio platform with istio-auth"
 # kubectl $ACTION -f install/kubernetes/istio-auth.yaml

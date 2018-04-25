@@ -24,7 +24,7 @@ ingressIP=9.37.39.12
 ingressPort=$(kubectl -n istio-system get svc istio-ingress -o 'jsonpath={.spec.ports[0].nodePort}'); echo ""
 
 echo "simple etcd test"
-curl -v http://$ingressIP:32012/v2/keys/message -XPUT -d value="Hello world"; echo ""
+curl -v http://$ingressIP:32012/v2/keys/etcdDirect -XPUT -d value="simple etcd test"; echo ""
 echo "-------------------------------"
 
 echo "simple ping test"
@@ -32,7 +32,7 @@ curl -v http://$ingressIP:32380/; echo ""
 echo "-------------------------------"
 
 echo "test etcd service API call from node app"
-curl -v http://$ingressIP:32380/storage -H "Content-Type: application/json" -XPUT -d '{"key": "istioTest", "value":"Testing Istio using NodePort"}'; echo ""
+curl -v http://$ingressIP:32380/storage -H "Content-Type: application/json" -XPUT -d '{"key": "istioTestNodeA", "value":"Testing Istio using NodePort"}'; echo ""
 curl -v http://$ingressIP:32380/storage/istioTest; echo ""
 echo "-------------------------------"
 
@@ -40,13 +40,8 @@ echo "simple hello test"
 curl -v http://$ingressIP:$ingressPort/; echo ""
 echo "-------------------------------"
 
-echo "test simple ping test from node app via Ingress"
-curl -v http://$ingressIP:$ingressPort/; echo ""
-echo "-------------------------------"
-
-
-echo "test etcd service API call from node app via Ingress"
-curl -v http://$ingressIP:$ingressPort/storage -H "Content-Type: application/json" -XPUT -d '{"key": "istioTest", "value":"Testing Istio using Ingress"}'; echo ""
+echo "test etcd service API call using ingress"
+curl -v http://$ingressIP:$ingressPort/storage -H "Content-Type: application/json" -XPUT -d '{"key": "istioTestIngress", "value":"Testing Istio using Ingress"}'; echo ""
 curl -v http://$ingressIP:$ingressPort/storage/istioTest; echo ""
 echo "-------------------------------"
 

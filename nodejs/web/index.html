@@ -1,0 +1,119 @@
+
+<html>
+<style>
+table, td  {
+  border: 1px solid grey;
+  border-collapse: collapse;
+  padding: 5px;
+}
+#datatable {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#datatable td, #datatable th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+#datatable tr:nth-child(even){background-color: #f2f2f2;}
+
+#datatable tr:hover {background-color: #ddd;}
+
+#datatable th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<link rel="stylesheet"
+	href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<script
+	src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script
+	src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<body>
+
+<div ng-app="myApp" ng-controller="etcdCtrl"> 
+<h1>Istio is not just for microservices</h1>
+
+    <table id="datatable">
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr ng-repeat="x in keys">
+        <td ng-if="$odd" style="background-color:#f1f1f1">
+        {{ x.key }}</td>
+        <td ng-if="$even">
+        {{ x.key }}</td>
+        <td ng-if="$odd" style="background-color:#f1f1f1">
+        {{ x.value }}</td>
+        <td ng-if="$even">
+        {{ x.value }}</td>
+        <td ng-if="$even"><input type="button" value="Remove" class="btn btn-primary" ng-click="removeRow(x.key)"/></td> 
+        <td ng-if="$odd" style="background-color:#f1f1f1"><input type="button" value="Remove" class="btn btn-primary" ng-click="removeRow(x.key)"/></td> 
+        </tr>
+        <tr>
+            <form name="createForm" class="form-horizontal" role="form" ng-submit="addRow()">
+            <td>
+                <div class="form-group col-md-4">
+                    <input type="text" class="form-control" id="name" ng-model="add.key" ng-required="required">
+                </div>
+            </td>
+            <td>
+                <div class="form-group col-md-4">
+                    <input type="text" class="form-control" id="value" ng-model="add.value" ng-required="required">
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </div>
+            </td> 
+            </form>
+        </tr>
+    </table>
+</span>
+
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+app.controller('etcdCtrl', 
+    function($scope, $http) {
+        $scope.required = true;
+        $scope.getRows = function() {
+            $http.get("/storage")
+            .then(function (response) {
+                    console.log("response", response); 
+                    $scope.keys = response.data.node.nodes
+            }
+        )};
+        $scope.addRow = function(){		
+            var payLoad = { "key": $scope.add.key, "value": $scope.add.value }
+            $http.put("/storage", payLoad)
+            .then(function (response) {
+                $scope.getRows();
+                $scope.add = {} 
+                $scope.createForm.$setPristine(true);
+            }
+        )};
+        $scope.removeRow = function(itemToDelete){		
+            $http.delete("/storage"+itemToDelete)
+            .then(function (response) {
+                $scope.getRows();
+            }
+        )};
+        $scope.getRows();
+    })
+</script>
+
+</body>
+</html>

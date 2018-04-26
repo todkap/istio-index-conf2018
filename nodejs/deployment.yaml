@@ -54,6 +54,10 @@ spec:
         backend:
           serviceName: proxy-etcd-storage
           servicePort: 9080
+      - path: /web/.*
+        backend:
+          serviceName: proxy-etcd-storage
+          servicePort: 9080
       - path: /
         backend:
           serviceName: proxy-etcd-storage

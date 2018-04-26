@@ -39,6 +39,9 @@ This project contains a script that will deploy Istio and the application to Kub
 ### Testing
 This project contains two scripts for testing depending upon which Kubernetes provider that is used. The only difference in the two scripts is the setting of the ingress IP address for IBM Cloud Private.   To test choose either ```testICPEnv.sh``` or ```testMinikubeEnv.sh``` based upon your provider.
 
+In addition to the scripts, there is a lightweight web interface for interacting with the REST APIs.   
+![alt text][ui]
+
 ### Verification
 To verify the success of the Istio integration, the script executes a set of tests.  
 
@@ -273,4 +276,5 @@ Weave Scope provides a Service Graph which will display the request flow for the
 [weavescope]: https://github.com/todkap/istio-index-conf2018/blob/master/images/weavescope.png "Weave Scope"
 
 [israel]: https://github.com/todkap/istio-index-conf2018/blob/master/images/1397375_910870955327_147651637_o.jpg "Israel"
+[ui]: https://github.com/todkap/istio-index-conf2018/blob/master/images/ui.png "Simple Form"
 

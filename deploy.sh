@@ -37,6 +37,7 @@ ACTION=apply
 # echo "deploy the default istio platform with istio-auth"
 # kubectl $ACTION -f install/kubernetes/istio-auth.yaml
 echo "deploy the default istio platform with istio"
+kubectl create namespace istio-system
 kubectl $ACTION -f install/kubernetes/istio.yaml
 
 
@@ -54,12 +55,14 @@ kubectl $ACTION -f install/kubernetes/addons/grafana.yaml
 
 export kcontext=$(kubectl config current-context)
 export kns=$(kubectl config view $kcontext -o json | jq --raw-output '.contexts[] | select(.name=="'$kcontext'") | .context.namespace')
-if [ "$kns" != "default" ]; then
+if [ "$kns" != "default" ] ; then
+	if [[ ! -z "$kns"  ]] ; then
+		kns="default" 
+	fi
 	cat $SECURITY/permissions.yaml.tmpl | \
 	sed -e "s/{NAMESPACE}/$kns/" > $SECURITY/permissions.yaml
 	kubectl $ACTION -f $SECURITY/permissions.yaml
 fi
-
 
 statusCheck="NOT_STARTED"
 while [ "$statusCheck" != "" ] ; do

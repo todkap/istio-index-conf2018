@@ -1,5 +1,6 @@
 export KIALI=$PWD/kiali
 export GOPATH=$KIALI/source/kiali/kiali
+export DOCKER_VERSION=latest
 
 mkdir -p $GOPATH
 cd $GOPATH
@@ -15,6 +16,5 @@ echo $PWD
 make build
 make docker-build
 
-# make minikube-docker
-make docker-push
+make minikube-docker
 make k8s-deploy

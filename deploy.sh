@@ -4,6 +4,7 @@ export PATH_TO_ETCD=$PWD/etcd
 export PATH_TO_NODE=$PWD/nodejs
 export SECURITY=$PWD/security
 
+
 function timer()
 {
     if [[ $# -eq 0 ]]; then
@@ -25,11 +26,11 @@ startTime=$(timer)
 
 
 
-if [ !  -d "istio-0.6.0" ]; then
+if [ !  -d "istio-0.7.1" ]; then
 	curl -L https://git.io/getLatestIstio | sh -
 fi
 
-cd istio-0.6.0
+cd istio-0.7.1
 export PATH=$PWD/bin:$PATH
 
 ACTION=apply
@@ -116,7 +117,6 @@ if [ "$ACTION" != "delete" ] ; then
 	WEAVE_SCOPE_PORT=$(kubectl get service weave-scope-app --namespace=weave -o 'jsonpath={.spec.ports[0].nodePort}')
 	echo "Weave Scope is available on port $WEAVE_SCOPE_PORT"
 fi
-
 
 endTime=$(timer startTime)
 printf 'deploy Elapsed time: %s\n' $endTime 

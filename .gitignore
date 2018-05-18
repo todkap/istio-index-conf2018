@@ -1,3 +1,4 @@
 istio-*
 nodejs/node_modules
 security/permissions.yaml
+kiali/

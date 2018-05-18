@@ -20,7 +20,7 @@ function timer()
 }
 startTime=$(timer)
 
-ingressIP=9.37.39.12
+ingressIP=9.37.39.73
 ingressPort=$(kubectl -n istio-system get svc istio-ingress -o 'jsonpath={.spec.ports[0].nodePort}'); echo ""
 
 echo "simple etcd test"

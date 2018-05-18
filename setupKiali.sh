@@ -1,6 +1,7 @@
 export KIALI=$PWD/kiali
 export GOPATH=$KIALI/source/kiali/kiali
 export DOCKER_VERSION=latest
+export SECURITY=$PWD/security
 
 mkdir -p $GOPATH
 cd $GOPATH
@@ -18,3 +19,5 @@ make docker-build
 
 make minikube-docker
 make k8s-deploy
+
+kubectl apply -f $SECURITY/kiala-cluster-role.yaml

@@ -1,7 +1,6 @@
 
-export MASTER_IP=9.37.39.12
+export MASTER_IP=9.37.39.99
 
-export PATH_TO_ISTIO_ADDONS=$PWD/istioaddons
 export PATH_TO_ETCD=$PWD/etcd
 export PATH_TO_NODE=$PWD/nodejs
 export SECURITY=$PWD/security
@@ -36,17 +35,13 @@ case "$os" in
     Darwin) os="darwin" ;;
 esac
 
-# install helm cli
-curl -ko helm https://$MASTER_IP:8443/helm-api/cli/$os-amd64/helm
-mv helm /usr/local/bin
-export PATH=/usr/local/bin:$PATH
-chmod 755 /usr/local/bin/helm
+curl -L  https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash -s -- --version v2.7.2  
+export HELM_HOME=~/.helm
 
-if [ !  -d "istio-0.6.0" ]; then
-	curl -L https://git.io/getLatestIstio | sh -
-fi
+echo "helm version"
+helm version
 
-export PATH=$PWD/istio-0.6.0/bin:$PATH
+export PATH=$PWD/istio-0.7.1/bin:$PATH
 
 # install bx pr plugin
 curl -ko icp-plugin https://$MASTER_IP:8443/api/cli/icp-$os-amd64
@@ -57,16 +52,10 @@ bx pr cluster-config mycluster
 
 helm init --client-only
 
-kubectl delete services,deployment --all --namespace=istio-system
-kubectl delete services,deployment --all --namespace=default
-
 echo "deploy istio helm chart"
-helm delete istio --purge --tls
+helm delete --purge istio --tls
 
-rm -rf ./istio-chart
-git clone git@github.ibm.com:IBMPrivateCloud/istio-chart.git istio-chart
-
-helm install ./istio-chart --name istio --namespace istio-system --set sidecar-injector.enabled=true --set global.securityEnabled=false  --tls
+helm install https://raw.githubusercontent.com/IBM/charts/master/repo/stable/ibm-istio-0.7.1.tgz --name istio --namespace istio-system --set sidecar-injector.enabled=true,global.mtls.enabled=false --tls
 
 statusCheck="NOT_STARTED"
 while [ "$statusCheck" != "" ] ; do
@@ -94,7 +83,6 @@ while [ "$statusCheck" != "" ] ; do
 done
 
 echo "deploy Node application"
-
 kubectl $ACTION  -f $PATH_TO_NODE/deployment.yaml
 
 statusCheck="NOT_STARTED"
@@ -117,7 +105,6 @@ done
 echo "deploy etcd operator"
 kubectl $ACTION -f $PATH_TO_ETCD/etcd-operator-deployment.yaml
 
-
 statusCheck="NOT_STARTED"
 while [ "$statusCheck" != "" ] ; do
 	sleep 20
@@ -139,6 +126,6 @@ if [ "$ACTION" != "delete" ] ; then
 	echo "Weave Scope is available on port $WEAVE_SCOPE_PORT"
 fi
 
-
+	
 endTime=$(timer startTime)
 printf 'deploy Elapsed time: %s\n' $endTime 

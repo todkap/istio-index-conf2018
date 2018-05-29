@@ -234,7 +234,7 @@ if [ -x "$(command -v loadtest)" ]; then
 fi
 ```
 
-***Grafana***  
+#### Grafana  
 In your Kubernetes environment, execute the following command:
 ```
 kubectl -n istio-system port-forward $(kubectl -n istio-system get \
@@ -244,7 +244,7 @@ Visit http://localhost:3000/dashboard/db/istio-dashboard in your web browser.  T
 
 ![alt text][grafana]
 
-***Prometheus***  
+#### Prometheus
 In your Kubernetes environment, execute the following command:
 ```
 kubectl -n istio-system port-forward $(kubectl -n istio-system get \
@@ -254,14 +254,25 @@ Visit http://localhost:9090/graph in your web browser. The Istio Dashboard will 
 
 ![alt text][prometheus]
 
-***Weave Scope***  
-During the deploy step, Weave Scope was deployed as part of the set up.   In the console, the port for Weave Scope is logged but is also available using the command.
+#### Weave Scope 
+During the deploy script, Weave Scope was also deployed to the environment.   In the console, the port for Weave Scope is logged but is also available using the command.
 ```
-kubectl get service weave-scope-app --namespace=weave -o 'jsonpath={.spec.ports[0].nodePort}'  
+kubectl get service weave-scope-app --namespace=weave -o 'jsonpath={.spec.ports[0].nodePort}'; echo ''  
 ```
 Weave Scope provides a Service Graph which will display the request flow for the tests executed in the test process. The Weave Scope Dashboard will look similar to:
 
 ![alt text][weavescope]
+
+#### Kiali  
+Kiali is a relatively new project focused on Service Mesh Observability and supports Istio 0.7.1 or later.  Inside of this project is a separate script ```setupKiali.s``` that will build and install Kiali as well as apply the appropriate ClusterRole required to run on IBM Cloud Private.  To view the console in your environemnt, you will need the NodePort for the servivce.  To retrieve the port for Kiali  use the following command.
+```
+kubectl get service kiali --namespace=istio-system -o 'jsonpath={.spec.ports[0].nodePort}'; echo ''  
+```
+Kiali provides a Service Graph similar to Weave Scope capable of showing historical view of the request flow as well as other interesting views of your K8 environment such as Services and Tracing. To see this capability in action, the service graph should be viewed after the load test scripts are executed. The Kiali Dashboard will look similar to:
+
+![alt text][kiali]
+
+
 
 ### Slides
 **Istio is not just for microservices on Slideshare:** https://www.slideshare.net/ToddKaplinger/istio-is-not-just-for-microservices
@@ -274,6 +285,8 @@ Weave Scope provides a Service Graph which will display the request flow for the
 [grafana]: https://github.com/todkap/istio-index-conf2018/blob/master/images/loadtest_grafana.png "Load Test Grafana"
 [prometheus]: https://github.com/todkap/istio-index-conf2018/blob/master/images/loadtest_prometheus.png "Load Test Prometheus"
 [weavescope]: https://github.com/todkap/istio-index-conf2018/blob/master/images/weavescope.png "Weave Scope"
+[kiali]: https://github.com/todkap/istio-index-conf2018/blob/master/images/loadtest_kiali.png "Kiali Console"
+
 
 [israel]: https://github.com/todkap/istio-index-conf2018/blob/master/images/1397375_910870955327_147651637_o.jpg "Israel"
 [ui]: https://github.com/todkap/istio-index-conf2018/blob/master/images/ui.png "Simple Form"

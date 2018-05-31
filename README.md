@@ -34,7 +34,11 @@ To get started with the code, clone the repo ```git clone git@github.com:todkap/
 - **IBM Cloud Private:** IBM Cloud Private has a [configure client](https://www.ibm.com/support/knowledgecenter/en/SSBS6K_2.1.0/manage_cluster/cfc_cli.html) step that will configure the Kubernetes CLI to point to a given IBM Cloud Private installation.  This context will be used each time the Kubectl CLI executes commands.
 
 ### Deploy
-This project contains a script that will deploy Istio and the application to Kubernetes and is called ```deploy.sh```.  The script provides verbose output as it progresses through the various steps waiting for the entire system to be in ```Runninng``` state prior to exiting.
+#### Kubernetes Installation 
+This project contains a script that will deploy Istio and the application to Kubernetes called ```deploy.sh```.  The script provides verbose output as it progresses through the various steps waiting for the entire system to be in ```Running``` state prior to exiting.
+
+#### Helm Installation
+Starting with IBM Cloud Private version 2.1.0.3, the Istio Control Plane can be installed via a Helm chart as part of the initial install or via the Catalog post installation.  Included in this project is an additional script called ```icp-helm-deploy``` that leverages a combination of the IBM Cloud Private CLI, Helm CLI and Kubernetes CLI to install the Istio Index application.   In an effort to simplify the deployment process and promote some of the latest features of Istio, I have enabled  [automatic sidecar injection](https://istio.io/docs/setup/kubernetes/sidecar-injection.html#automatic-sidecar-injection) for this application. 
 
 ### Testing
 This project contains two scripts for testing depending upon which Kubernetes provider that is used. The only difference in the two scripts is the setting of the ingress IP address for IBM Cloud Private.   To test choose either ```testICPEnv.sh``` or ```testMinikubeEnv.sh``` based upon your provider.

@@ -35,15 +35,18 @@ curl -v http://$ingressIP:32380/storage -H "Content-Type: application/json" -XPU
 curl -v http://$ingressIP:32380/storage/istioTestNode; echo ""
 echo "-------------------------------"
 
+GATEWAY_HOST="--resolve proxy-etcd-storage.example.com:$ingressPort:$ingressIP -HHost:proxy-etcd-storage.example.com \
+     http://proxy-etcd-storage.example.com:$ingressPort"
+
 echo "simple hello test"
-curl -v http://$ingressIP:$ingressPort/; echo ""
+curl -v $GATEWAY_HOST/; echo ""
 echo "-------------------------------"
 
-echo "-------------------------------"
 echo "test etcd service API call using ingress"
-curl -v http://$ingressIP:$ingressPort/storage -H "Content-Type: application/json" -XPUT -d '{"key": "istioTestIngress", "value":"Testing Istio using Ingress"}'; echo ""
-curl -v http://$ingressIP:$ingressPort/storage/istioTestIngress; echo ""
+curl -v $GATEWAY_HOST/storage -H "Content-Type: application/json" -XPUT -d '{"key": "istioTestIngress", "value":"Testing Istio using Ingress"}'; echo ""
+curl -v $GATEWAY_HOST/storage/istioTestIngress; echo ""
 echo "-------------------------------"
+
 
 CLIENT=$(kubectl get pod -l app=proxy-etcd-storage -o jsonpath='{.items[0].metadata.name}')
 SERVER=$(kubectl get pod -l app=etcd -o jsonpath='{.items[0].metadata.name}')

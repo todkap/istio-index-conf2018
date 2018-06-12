@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export KIALI=$PWD/kiali
 export GOPATH=$KIALI/source/kiali/kiali
 export DOCKER_VERSION=latest

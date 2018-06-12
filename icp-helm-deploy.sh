@@ -1,3 +1,4 @@
+#!/bin/bash
 
 export MASTER_IP=9.37.39.99
 

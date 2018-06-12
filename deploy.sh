@@ -1,3 +1,4 @@
+#!/bin/bash
 
 export PATH_TO_ISTIO_ADDONS=$PWD/istioaddons
 export PATH_TO_ETCD=$PWD/etcd
@@ -27,7 +28,7 @@ startTime=$(timer)
 
 
 if [ !  -d "istio-0.7.1" ]; then
-	curl -L https://git.io/getLatestIstio | sh -
+	curl -L https://git.io/getLatestIstio | ISTIO_VERSION=0.7.1 sh -
 fi
 
 cd istio-0.7.1

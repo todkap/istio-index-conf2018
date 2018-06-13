@@ -19,8 +19,8 @@ function timer()
 }
 startTime=$(timer)
 
-ingressIP=9.37.39.99
-ingressPort=$(kubectl -n istio-system get svc istio-ingress -o 'jsonpath={.spec.ports[0].nodePort}'); echo ""
+ingressIP=9.37.39.107
+ingressPort=$(kubectl -n istio-system get svc istio-ingressgateway -o 'jsonpath={.spec.ports[0].nodePort}'); echo ""
 
 echo "simple etcd test"
 curl -v http://$ingressIP:32012/v2/keys/etcdDirect -XPUT -d value="simple etcd test"; echo ""

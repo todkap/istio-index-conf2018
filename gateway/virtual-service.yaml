@@ -4,7 +4,7 @@ metadata:
   name: proxy-etcd-storage
 spec:
   hosts:
-  - "proxy-etcd-storage.example.com"
+  - "*"
   gateways:
   - proxy-etcd-storage-gateway
   http:

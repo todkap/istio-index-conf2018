@@ -79,6 +79,9 @@ echo "deploy Node application"
 kubectl $ACTION  -f <(istioctl kube-inject -f $PATH_TO_NODE/deployment.yaml)
 
 echo "deploy Istio Gateway and routing rule"
+istioctl delete -f $ACTION -f $GATEWAY/http-gateway.yaml
+istioctl delete -f $ACTION -f $GATEWAY/virtual-service.yaml
+
 istioctl create -f $ACTION -f $GATEWAY/http-gateway.yaml
 istioctl create -f $ACTION -f $GATEWAY/virtual-service.yaml
 

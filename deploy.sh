@@ -29,8 +29,8 @@ startTime=$(timer)
 
 
 
-if [ !  -d "istio-0.8.0" ]; then
-	curl -L https://git.io/getLatestIstio | ISTIO_VERSION=0.8.0 sh -
+if [ !  -d "istio-1.0.0" ]; then
+	curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.0.0 sh -
 fi
 
 cd istio-0.8.0

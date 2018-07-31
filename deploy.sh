@@ -4,6 +4,8 @@ export PATH_TO_ISTIO_ADDONS=$PWD/istioaddons
 export PATH_TO_ETCD=$PWD/etcd
 export PATH_TO_NODE=$PWD/nodejs
 export SECURITY=$PWD/security
+export GATEWAY=$PWD/gateway
+
 
 
 function timer()
@@ -27,11 +29,11 @@ startTime=$(timer)
 
 
 
-if [ !  -d "istio-0.7.1" ]; then
-	curl -L https://git.io/getLatestIstio | ISTIO_VERSION=0.7.1 sh -
+if [ !  -d "istio-0.8.0" ]; then
+	curl -L https://git.io/getLatestIstio | ISTIO_VERSION=0.8.0 sh -
 fi
 
-cd istio-0.7.1
+cd istio-0.8.0
 export PATH=$PWD/bin:$PATH
 
 ACTION=apply
@@ -40,7 +42,7 @@ ACTION=apply
 # kubectl $ACTION -f install/kubernetes/istio-auth.yaml
 echo "deploy the default istio platform with istio"
 kubectl create namespace istio-system
-kubectl $ACTION -f install/kubernetes/istio.yaml
+kubectl $ACTION -f install/kubernetes/istio-demo.yaml
 
 
 statusCheck="NOT_STARTED"
@@ -53,6 +55,8 @@ done
 kubectl $ACTION -f install/kubernetes/addons/prometheus.yaml
 kubectl $ACTION -f $PATH_TO_ISTIO_ADDONS/prometheus_telemetry.yaml
 kubectl $ACTION -f install/kubernetes/addons/grafana.yaml
+kubectl apply --namespace=istio-system -f https://raw.githubusercontent.com/jaegertracing/jaeger-kubernetes/master/all-in-one/jaeger-all-in-one-template.yml
+
 
 
 export kcontext=$(kubectl config current-context)
@@ -74,8 +78,14 @@ while [ "$statusCheck" != "" ] ; do
 done
 
 echo "deploy Node application"
-#kubectl $ACTION  -f <(istioctl kube-inject -f $PATH_TO_NODE/all-in-one-deployment.yaml)
 kubectl $ACTION  -f <(istioctl kube-inject -f $PATH_TO_NODE/deployment.yaml)
+
+echo "deploy Istio Gateway and routing rule"
+istioctl delete -f $ACTION -f $GATEWAY/http-gateway.yaml
+istioctl delete -f $ACTION -f $GATEWAY/virtual-service.yaml
+
+istioctl create -f $ACTION -f $GATEWAY/http-gateway.yaml
+istioctl create -f $ACTION -f $GATEWAY/virtual-service.yaml
 
 statusCheck="NOT_STARTED"
 while [ "$statusCheck" != "" ] ; do

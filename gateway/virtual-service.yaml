@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: proxy-etcd-storage
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - proxy-etcd-storage-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /storage
+    - uri:
+        prefix: /web
+    - uri:
+        prefix: /    
+    route:
+    - destination:
+        port:
+          number: 9080
+        host: proxy-etcd-storage

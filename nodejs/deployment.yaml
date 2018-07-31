@@ -36,30 +36,30 @@ spec:
 ##################################################################################################
 # Ingress Routing
 ##################################################################################################
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: simple-ingress
-  annotations:
-    kubernetes.io/ingress.class: "istio"
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /storage
-        backend:
-          serviceName: proxy-etcd-storage
-          servicePort: 9080
-      - path: /storage/.*
-        backend:
-          serviceName: proxy-etcd-storage
-          servicePort: 9080
-      - path: /web/.*
-        backend:
-          serviceName: proxy-etcd-storage
-          servicePort: 9080
-      - path: /
-        backend:
-          serviceName: proxy-etcd-storage
-          servicePort: 9080
----
+# apiVersion: extensions/v1beta1
+# kind: Ingress
+# metadata:
+#   name: simple-ingress
+#   annotations:
+#     kubernetes.io/ingress.class: "istio"
+# spec:
+#   rules:
+#   - http:
+#       paths:
+#       - path: /storage
+#         backend:
+#           serviceName: proxy-etcd-storage
+#           servicePort: 9080
+#       - path: /storage/.*
+#         backend:
+#           serviceName: proxy-etcd-storage
+#           servicePort: 9080
+#       - path: /web/.*
+#         backend:
+#           serviceName: proxy-etcd-storage
+#           servicePort: 9080
+#       - path: /
+#         backend:
+#           serviceName: proxy-etcd-storage
+#           servicePort: 9080
+# ---

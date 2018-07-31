@@ -56,7 +56,7 @@ helm init --client-only
 echo "deploy istio helm chart"
 helm delete --purge istio --tls
 
-helm install https://raw.githubusercontent.com/IBM/charts/master/repo/stable/ibm-istio-0.7.1.tgz --name istio --namespace istio-system --set sidecar-injector.enabled=true,global.mtls.enabled=false --tls
+helm install https://raw.githubusercontent.com/IBM/charts/master/repo/stable/ibm-istio-0.8.0.tgz --name istio --namespace istio-system --set sidecar-injector.enabled=true,global.mtls.enabled=false --tls
 
 statusCheck="NOT_STARTED"
 while [ "$statusCheck" != "" ] ; do

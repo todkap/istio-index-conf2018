@@ -55,6 +55,8 @@ done
 kubectl $ACTION -f install/kubernetes/addons/prometheus.yaml
 kubectl $ACTION -f $PATH_TO_ISTIO_ADDONS/prometheus_telemetry.yaml
 kubectl $ACTION -f install/kubernetes/addons/grafana.yaml
+kubectl apply --namespace=istio-system -f https://raw.githubusercontent.com/jaegertracing/jaeger-kubernetes/master/all-in-one/jaeger-all-in-one-template.yml
+
 
 
 export kcontext=$(kubectl config current-context)

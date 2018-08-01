@@ -19,7 +19,7 @@ function timer()
 }
 startTime=$(timer)
 
-ingressIP=9.37.39.107
+ingressIP=9.37.39.42
 ingressPort=$(kubectl -n istio-system get svc istio-ingressgateway -o 'jsonpath={.spec.ports[0].nodePort}'); echo ""
 
 echo "simple etcd test"
@@ -55,15 +55,15 @@ kubectl logs $SERVER istio-proxy | grep /v2/keys
 
 echo "-------------------------------"
 
-# ## Simple load test using loadtest (https://www.npmjs.com/package/loadtest)
-# if [ -x "$(command -v loadtest)" ]; then
-# 	loadtest -n 4000 -c 10 --rps 50 http://$ingressIP:$ingressPort/storage/istioTestIngress; echo ""
-#     echo "-------------------------------"
-# 	loadtest -n 4000 -c 10 --rps 50 http://$ingressIP:$ingressPort/storage/istioTestIngress; echo ""
-#     echo "-------------------------------"
-# 	loadtest -n 4000 -c 10 --rps 50 http://$ingressIP:$ingressPort/storage/istioTestIngress; echo ""
-#     echo "-------------------------------"
-# fi
+## Simple load test using loadtest (https://www.npmjs.com/package/loadtest)
+if [ -x "$(command -v loadtest)" ]; then
+	loadtest -n 4000 -c 10 --rps 50 http://$ingressIP:$ingressPort/storage/istioTestIngress; echo ""
+    echo "-------------------------------"
+	loadtest -n 4000 -c 10 --rps 50 http://$ingressIP:$ingressPort/storage/istioTestIngress; echo ""
+    echo "-------------------------------"
+	loadtest -n 4000 -c 10 --rps 50 http://$ingressIP:$ingressPort/storage/istioTestIngress; echo ""
+    echo "-------------------------------"
+fi
 
 endTime=$(timer startTime)
 printf 'testICPEnv Elapsed time: %s\n' $endTime 

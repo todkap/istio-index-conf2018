@@ -1,10 +1,11 @@
 #!/bin/bash
 
-export MASTER_IP=9.37.39.99
+export MASTER_IP=9.37.39.42
 
 export PATH_TO_ETCD=$PWD/etcd
 export PATH_TO_NODE=$PWD/nodejs
 export SECURITY=$PWD/security
+export GATEWAY=$PWD/gateway
 
 function timer()
 {
@@ -25,6 +26,13 @@ function timer()
 }
 startTime=$(timer)
 
+if [ !  -d "istio-1.0.0" ]; then
+	curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.0.0 sh -
+fi
+
+cd istio-1.0.0
+export PATH=$PWD/bin:$PATH
+
 ACTION=apply
 
 # install bx cli
@@ -42,8 +50,6 @@ export HELM_HOME=~/.helm
 echo "helm version"
 helm version
 
-export PATH=$PWD/istio-0.7.1/bin:$PATH
-
 # install bx pr plugin
 curl -ko icp-plugin https://$MASTER_IP:8443/api/cli/icp-$os-amd64
 bx plugin install -f icp-plugin
@@ -53,10 +59,17 @@ bx pr cluster-config mycluster
 
 helm init --client-only
 
-echo "deploy istio helm chart"
+echo "delete istio helm chart"
 helm delete --purge istio --tls
 
-helm install https://raw.githubusercontent.com/IBM/charts/master/repo/stable/ibm-istio-0.8.0.tgz --name istio --namespace istio-system --set sidecar-injector.enabled=true,global.mtls.enabled=false --tls
+echo "install istio CRDs"
+## temporary install until helm can be updated on later release of ICP.
+kubectl $ACTION -f https://raw.githubusercontent.com/IBM/charts/master/stable/ibm-istio/templates/crds.yaml
+
+echo "deploy istio helm chart"
+helm install https://raw.githubusercontent.com/IBM/charts/master/repo/stable/ibm-istio-1.0.0.tgz --name istio \
+			--namespace istio-system --set sidecarInjectorWebhook.enabled=true \
+			--set global.mtls.enabled=false --tls
 
 statusCheck="NOT_STARTED"
 while [ "$statusCheck" != "" ] ; do
@@ -85,6 +98,14 @@ done
 
 echo "deploy Node application"
 kubectl $ACTION  -f $PATH_TO_NODE/deployment.yaml
+
+
+echo "deploy Istio Gateway and routing rule"
+istioctl delete -f $ACTION -f $GATEWAY/http-gateway.yaml
+istioctl delete -f $ACTION -f $GATEWAY/virtual-service.yaml
+
+istioctl create -f $ACTION -f $GATEWAY/http-gateway.yaml
+istioctl create -f $ACTION -f $GATEWAY/virtual-service.yaml
 
 statusCheck="NOT_STARTED"
 while [ "$statusCheck" != "" ] ; do

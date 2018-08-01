@@ -33,7 +33,7 @@ if [ !  -d "istio-1.0.0" ]; then
 	curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.0.0 sh -
 fi
 
-cd istio-0.8.0
+cd istio-1.0.0
 export PATH=$PWD/bin:$PATH
 
 ACTION=apply
